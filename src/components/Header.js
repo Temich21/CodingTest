@@ -17,6 +17,10 @@ export default () => {
     })();
   }, []);
 
+  window.rerenderHeader = (name) => {
+    setUsers([...users, { id: users.length + 1, name: name }]);
+  };
+
   if (users.length === 0) return <></>;
 
   return (
@@ -24,7 +28,7 @@ export default () => {
       Last employee is{" "}
       <span
         dangerouslySetInnerHTML={{
-          __html: `<strong>${users[users.length - 1].name}</strong>`
+          __html: `<strong>${users[users.length - 1].name}</strong>`,
         }}
       ></span>
     </div>
