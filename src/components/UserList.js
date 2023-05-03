@@ -14,12 +14,10 @@ export default () => {
     setUsers([...users, { id: users.length + 1, name: name }]);
   };
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users").then((foo) => {
-      foo.json().then((bar) => {
-        setUsers(bar);
-      });
-    });
+  useEffect(async () => {
+    const data = await fetch("https://jsonplaceholder.typicode.com/users");
+    const userList = await data.json();
+    setUsers(userList);
   }, []);
 
   if (users.length === 0) return <></>;
