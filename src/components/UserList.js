@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState } from "react";
 
 export default () => {
   const [users, setUsers] = useState([]);
@@ -6,16 +6,18 @@ export default () => {
   window.submitForm = (name) => {
     alert("Submiting form for " + name);
     users[users.length - 1].name += " (*)"; // mark the previous employee
-    users.push({ name: name });
-    setUsers(users);
+    if (users[users.length - 2].name.includes("(*)")) {
+      let prevPrevNameArray = users[users.length - 2].name.split(" ");
+      prevPrevNameArray.pop();
+      users[users.length - 2].name = prevPrevNameArray.join(" ");
+    }
+    setUsers([...users, { id: users.length + 1, name: name }]);
   };
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users").then((foo) => {
-      foo.json().then((bar) => {
-        setUsers(bar);
-      });
-    });
+  useEffect(async () => {
+    const data = await fetch("https://jsonplaceholder.typicode.com/users");
+    const userList = await data.json();
+    setUsers(userList);
   }, []);
 
   if (users.length === 0) return <></>;
@@ -26,7 +28,7 @@ export default () => {
         List of users
       </h4>
       <div>
-        {users.map((d, index) => (
+        {users.map((d) => (
           <Name data={d} />
         ))}
       </div>
@@ -34,6 +36,8 @@ export default () => {
   );
 };
 
-export const Name = memo(({ data }) => {
-  return <li>{data.name}</li>;
-});
+export const Name = ({ data }) => {
+  return <li key={data.id}>{data.name}</li>;
+};
+
+// export let userList;

@@ -14,6 +14,7 @@ export const AddNewUser = () => {
       alert("You are not old enough to be our employee");
     } else {
       window.submitForm(newName);
+      window.rerenderHeader(newName);
     }
   };
 
